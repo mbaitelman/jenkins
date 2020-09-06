@@ -130,10 +130,10 @@ job must first exist on the Jenkins master!
 
           new_resource.parameters.each_pair do |key, value|
             case value
-            when TrueClass, FalseClass
-              command_args << "-p #{key}=#{value}"
-            else
+            when value.include? " " #Check if has a space and needs to be quoted in the command line
               command_args << "-p #{key}='#{value}'"
+            else
+              command_args << "-p #{key}=#{value}"
             end
           end
 

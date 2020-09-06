@@ -129,12 +129,11 @@ job must first exist on the Jenkins master!
           end
 
           new_resource.parameters.each_pair do |key, value|
-            case value
-            when value.include? " " #Check if has a space and needs to be quoted in the command line
-              command_args << "-p #{key}='#{value}'"
-            else
-              command_args << "-p #{key}=#{value}"
-            end
+            command_args << if value.include? ' ' # Check if has a space and needs to be quoted in the command line
+                              "-p #{key}='#{value}'"
+                            else
+                              "-p #{key}=#{value}"
+                            end
           end
 
           if new_resource.stream_job_output && new_resource.wait_for_completion && stdout_stream
